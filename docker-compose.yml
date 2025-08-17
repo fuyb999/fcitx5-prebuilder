@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+
+  fcitx5-prebuilder-base:
+    image: fcitx5-prebuilder-base:latest
+    build:
+      context: .
+      dockerfile: Dockerfile-base
+
+  fcitx5-prebuilder:
+    image: fcitx5-prebuilder:latest
+    container_name: fcitx5-prebuilder
+    # /nix/store/diig4i6ln0ia8xvv4kqs99klpjhlpzfl-cabal-install-3.14.2.0/bin/cabal
+    # ./build-cabal && nix build --accept-flake-config
+#    environment:
+#      PATH: /nix/store/diig4i6ln0ia8xvv4kqs99klpjhlpzfl-cabal-install-3.14.2.0/bin:/usr/bin/:/usr/sbin/:/usr/local/bin
+    command: nix build --accept-flake-config
+    #entrypoint: tail -f /dev/null
+    build:
+      context: .
+      dockerfile: Dockerfile

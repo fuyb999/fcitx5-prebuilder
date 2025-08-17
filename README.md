@@ -44,3 +44,11 @@ both can be installed with `sdkmanager` command line tool.
 * libchewing: [chewing/libchewing](https://github.com/chewing/libchewing)
 * libthai: [tlwg/libthai](https://github.com/tlwg/libthai)
 * libiconv: [GNU/libiconv](https://savannah.gnu.org/projects/libiconv)
+
+```shell
+docker-compose build fcitx5-prebuilder-base --progress=plain
+docker-compose build fcitx5-prebuilder --progress=plain
+
+
+ docker run -it --rm -e NIX_CONFIG="experimental-features = nix-command flakes"  -w /app   nixos/nix   nix develop
+```

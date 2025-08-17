@@ -1,0 +1,16 @@
+FROM nixos/nix:latest
+
+RUN echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
+RUN echo "sandbox = false" >> /etc/nix/nix.conf
+RUN for device in full random urandom autofs; do \
+      mknod -m 666 /dev/$device c 1 $(echo $device | awk '/full/{print 7}/random/{print 8}/urandom/{print 9}/autofs/{print 235}') 2>/dev/null || true; \
+    done
+
+WORKDIR /prebuilder
+
+COPY . .
+
+#RUN git -C "/workdir" add "flake.nix" && \
+#    # You may also want to commit the changes
+#    git -C "/workdir" commit -m "Add flake.nix"
+RUN nix develop --accept-flake-config
