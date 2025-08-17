@@ -1,7 +1,23 @@
 {
-  description = "Dev shell flake for fcitx5-android prebuilder";
+  description = "Linux build environment for fcitx5";
 
-  inputs.fcitx5-android.url = "file:///prebuilder/fcitx5-android";
+  nixConfig = {
+    substituters = [
+      "https://mirrors.ustc.edu.cn/nix-channels/store"
+      "https://cache.nixos.org"
+    ];
+    trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "ustc.edu.cn-1:9/rD3vhcSgDzDJDROw7GmWlky/6USJjh0mR5P0Dp3Fc="
+    ];
+  };
+
+#  inputs.fcitx5-android.url = "file:///prebuilder/fcitx5-android";
+  inputs.fcitx5-android = {
+    type = "path";
+    path = "./fcitx5-android";
+  };
+
   inputs.flake-compat = {
     url = "github:edolstra/flake-compat";
     flake = false;

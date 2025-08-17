@@ -57,7 +57,6 @@
                       gettext
                       python3
                       icu
-                      androidStudio
                     ];
                     ANDROID_SDK_ROOT =
                       "${androidComposition.androidsdk}/libexec/android-sdk";
@@ -69,7 +68,7 @@
                     ECM_DIR = "${extra-cmake-modules}/share/ECM/cmake/";
                     JAVA_HOME = "${jdk17}";
                     shellHook = lib.optionalString exportCMakeBin ''
-                      export PATH="$ANDROID_SDK_ROOT/cmake/${cmakeVersion}/bin:$PATH"
+                      export PATH="$ANDROID_SDK_ROOT/cmake/null/bin:$PATH"
                     '' + lib.optionalString generateLocalProperties ''
                       echo sdk.dir=$ANDROID_SDK_ROOT > local.properties
                     '';
