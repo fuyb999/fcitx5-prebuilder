@@ -48,7 +48,4 @@ both can be installed with `sdkmanager` command line tool.
 ```shell
 docker-compose build fcitx5-prebuilder-base --progress=plain
 docker-compose build fcitx5-prebuilder --progress=plain
-
-
- docker run -it --rm -e NIX_CONFIG="experimental-features = nix-command flakes"  -w /app   nixos/nix   nix develop
 ```

@@ -36,7 +36,7 @@
               platformVersion = "35";
               ndkVersion = "28.0.13004108";
 
-              includeNDK = true;
+              includeNDK = false;
               androidComposition = final.androidenv.composeAndroidPackages {
                 inherit (self) platformToolsVersion ndkVersion includeNDK;
                 buildToolsVersions = [ self.buildToolsVersion ];
@@ -57,24 +57,27 @@
                       gettext
                       python3
                       icu
+#                      androidStudio
                     ];
-#                    ANDROID_SDK_ROOT =
+                    ANDROID_SDK_ROOT =
 #                      "${androidComposition.androidsdk}/libexec/android-sdk";
-#                    ANDROID_HOME = ANDROID_SDK_ROOT;
-#                    NDK_VERSION = ndkVersion;
-#                    BUILD_TOOLS_VERSION = buildToolsVersion;
-#                    GRADLE_OPTS =
-#                      "-Dorg.gradle.project.android.aapt2FromMavenOverride=${androidComposition.androidsdk}/libexec/android-sdk/build-tools/${buildToolsVersion}/aapt2";
-#                    ECM_DIR = "${extra-cmake-modules}/share/ECM/cmake/";
-#                    JAVA_HOME = "${jdk17}";
+                      "/tmp/sdk";
+                    ANDROID_HOME = ANDROID_SDK_ROOT;
+                    NDK_VERSION = ndkVersion;
+                    BUILD_TOOLS_VERSION = buildToolsVersion;
+                    GRADLE_OPTS =
+                      "-Dorg.gradle.project.android.aapt2FromMavenOverride=${androidComposition.androidsdk}/libexec/android-sdk/build-tools/${buildToolsVersion}/aapt2";
+                    ECM_DIR = "${extra-cmake-modules}/share/ECM/cmake/";
+                    JAVA_HOME = "${jdk17}";
                     shellHook = lib.optionalString exportCMakeBin ''
-                      export PATH="$ANDROID_SDK_ROOT/cmake/null/bin:$PATH"
+                      export PATH="$ANDROID_SDK_ROOT/cmake/${cmakeVersion}/bin:$PATH"
                     '' + lib.optionalString generateLocalProperties ''
                       echo sdk.dir=$ANDROID_SDK_ROOT > local.properties
                     '';
                   }) {
 #                    androidStudio = final.androidStudioPackages.beta;
                     androidStudio = null;
+
                     generateLocalProperties = true;
                     exportCMakeBin = true;
                   };

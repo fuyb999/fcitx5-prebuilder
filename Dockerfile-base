@@ -1,16 +1,27 @@
-FROM nixos/nix:latest
+FROM ubuntu:24.04
 
-RUN echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
-RUN echo "sandbox = false" >> /etc/nix/nix.conf
-RUN for device in full random urandom autofs; do \
-      mknod -m 666 /dev/$device c 1 $(echo $device | awk '/full/{print 7}/random/{print 8}/urandom/{print 9}/autofs/{print 235}') 2>/dev/null || true; \
-    done
+RUN sed -i -E 's/(archive|security).ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
+
+RUN ulimit -n 10240
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y git curl wget ca-certificates build-essential cmake extra-cmake-modules pkg-config \
+    libxcb1-dev libxcb-keysyms1-dev libxcb-util0-dev libdbus-1-dev libevent-dev uuid-dev gettext \
+    libsystemd-dev libxkbfile-dev libxkbcommon-x11-dev libxcb-xkb-dev libxcb1-dev libpango1.0-dev \
+    libpangocairo-1.0-0 libenchant-2-dev libxcb-ewmh-dev libxcb-xinerama0-dev libxcb-icccm4-dev \
+    libxcb-ewmh-dev wayland-protocols libboost-dev libcurl4-gnutls-dev libopencc-dev qtbase5-dev \
+    libqt5webchannel5-dev libboost-iostreams-dev gobject-introspection libgirepository1.0-dev \
+    libgtk2.0-dev libgtk-3-dev libfmt-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-xfixes0-dev \
+    libjson-c-dev iso-codes libzstd-dev libboost-filesystem-dev libgtk-4-dev qtbase5-private-dev \
+    fcitx5-module-lua-dev libqt5webkit5-dev liblua5.3-dev qtwebengine5-dev iso-codes libasio-dev \
+    meson libxml2-dev libgmp-dev
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+
+ENV PATH=/root/.cabal/bin:/root/.ghcup/bin:/usr/bin:/usr/sbin:/usr/local/bin
 
 WORKDIR /prebuilder
 
 COPY . .
 
-#RUN git -C "/workdir" add "flake.nix" && \
-#    # You may also want to commit the changes
-#    git -C "/workdir" commit -m "Add flake.nix"
-RUN nix develop --accept-flake-config
+RUN ./build-cabal

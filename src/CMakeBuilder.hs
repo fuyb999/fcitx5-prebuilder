@@ -119,10 +119,11 @@ useCMake CmakeBuilder {..} = addOracle $ \(WithAndroidEnv q env) -> do
         "-B"
         buildEnvBuildDir
         "-GNinja"
-        ( [ "-DCMAKE_TOOLCHAIN_FILE=" <> toolchain,
-            "-DANDROID_ABI=" <> a,
-            "-DANDROID_PLATFORM=" <> show (platform env),
-            "-DANDROID_STL=c++_shared",
+        ( [
+--            "-DCMAKE_TOOLCHAIN_FILE=" <> toolchain,
+--            "-DANDROID_ABI=" <> a,
+--            "-DANDROID_PLATFORM=" <> show (platform env),
+--            "-DANDROID_STL=c++_shared",
             "-DCMAKE_INSTALL_PREFIX=" <> buildEnvOutPrefix,
             "-DCMAKE_BUILD_TYPE=Release"
           ]
@@ -137,7 +138,8 @@ useCMake CmakeBuilder {..} = addOracle $ \(WithAndroidEnv q env) -> do
       libs <- liftIO $ getDirectoryFilesIO buildEnvOutPrefix ["//*.a"]
       forM_ libs $ \lib -> do
         -- strip
-        cmd_ (Cwd buildEnvOutPrefix) (getNdkStrip buildEnvAndroid) "--strip-unneeded" lib
+--        cmd_ (Cwd buildEnvOutPrefix) (getNdkStrip buildEnvAndroid) "--strip-unneeded" lib
+        cmd_ (Cwd buildEnvOutPrefix) "strip" "--strip-unneeded" lib
         -- detect hardcoded path
         (Exit c, Stdout result) <- cmd (Cwd buildEnvOutPrefix) Shell "strings --all --bytes=8" lib "| grep prebuilder"
         let libPath = makeRelative out (buildEnvOutPrefix </> lib)

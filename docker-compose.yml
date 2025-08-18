@@ -11,8 +11,7 @@ services:
   fcitx5-prebuilder:
     image: fcitx5-prebuilder:latest
     container_name: fcitx5-prebuilder
-    command: nix build --accept-flake-config && nix run nixpkgs#prebuilder --accept-flake-config
-    #entrypoint: tail -f /dev/null
+    entrypoint: tail -f /dev/null
     build:
       context: .
       dockerfile: Dockerfile
