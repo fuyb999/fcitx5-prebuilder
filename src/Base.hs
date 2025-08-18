@@ -135,16 +135,12 @@ withAndroidEnv env f = f (getSdkCMake env) (getCMakeToolchain env) (getSdkNinja 
 
 getAndroidEnv :: Action AndroidEnv
 getAndroidEnv = do
-  sdkRoot <-
-    fromMaybeM (fail "Both environment variable ANDROID_HOME and ANDROID_SDK_ROOT are unset!") $
-      (<|>) <$> getEnv "ANDROID_HOME" <*> getEnv "ANDROID_SDK_ROOT"
-  ndkRoot <- env "ANDROID_NDK_ROOT"
-  sdkCMakeVersion <- env "CMAKE_VERSION"
-  platform <- read <$> env "ANDROID_PLATFORM"
-  abi <- env "ABI"
+  let sdkRoot = "/tmp/sdk"  -- 替换为你的默认SDK路径
+      ndkRoot = "/tmp/ndk"          -- 替换为你的默认NDK路径
+      sdkCMakeVersion = "3.31.6"        -- 替换为你的默认CMake版本
+      platform = 31                     -- 替换为你的默认平台版本
+      abi = "x86_64"                 -- 替换为你的默认ABI
   pure AndroidEnv {..}
-  where
-    env name = fromMaybeM (fail $ "Environment variable " <> name <> " is unset!") $ getEnv name
 
 data WithAndroidEnv k = WithAndroidEnv k AndroidEnv
   deriving stock (Eq, Typeable, Generic)

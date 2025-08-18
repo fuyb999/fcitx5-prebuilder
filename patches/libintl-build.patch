@@ -1,0 +1,38 @@
+diff --git a/build-android-cmake.sh b/build-android-cmake.sh
+index d3b84cf..8ffd483 100755
+--- a/build-android-cmake.sh
++++ b/build-android-cmake.sh
+@@ -5,10 +5,10 @@ CMAKE=""
+ build_libintl() {
+     echo ">>> Building libintl for $1"
+     "$CMAKE" -B build \
+-        -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_ROOT"/build/cmake/android.toolchain.cmake \
+-        -DANDROID_ABI="$1" \
+-        -DANDROID_PLATFORM="$ANDROID_PLATFORM" \
+-        -DANDROID_STL=c++_shared \
++#        -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_ROOT"/build/cmake/android.toolchain.cmake \
++#        -DANDROID_ABI="$1" \
++#        -DANDROID_PLATFORM="$ANDROID_PLATFORM" \
++#        -DANDROID_STL=c++_shared \
+         -DCMAKE_BUILD_TYPE=Release \
+         -DCMAKE_INSTALL_PREFIX=out/libintl-lite/"$1" \
+         .
+@@ -42,12 +42,12 @@ if [ -z "${ANDROID_ABI}" ]; then
+     exit 1
+ fi
+ 
+-CMAKE="$ANDROID_SDK_ROOT/cmake/$ANDROID_SDK_CMAKE_VERSION/bin/cmake"
+-
+-if [ ! -f "$CMAKE" ]; then
+-    echo "Cannot find cmake: '$CMAKE'"
+-    exit 1
+-fi
++#CMAKE="$ANDROID_SDK_ROOT/cmake/$ANDROID_SDK_CMAKE_VERSION/bin/cmake"
++#
++#if [ ! -f "$CMAKE" ]; then
++#    echo "Cannot find cmake: '$CMAKE'"
++#    exit 1
++#fi
+ 
+ IFS=',' read -ra ARCH <<< "${ANDROID_ABI}"
+ 

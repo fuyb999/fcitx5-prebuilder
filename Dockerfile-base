@@ -1,6 +1,6 @@
 FROM ubuntu:24.04
 
-RUN sed -i -E 's/(archive|security).ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
+RUN sed -i -E 's/(archive|security).ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list.d/ubuntu.sources
 
 RUN ulimit -n 10240
 ENV DEBIAN_FRONTEND=noninteractive
@@ -14,7 +14,8 @@ RUN apt-get update && apt-get install -y git curl wget ca-certificates build-ess
     libgtk2.0-dev libgtk-3-dev libfmt-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-xfixes0-dev \
     libjson-c-dev iso-codes libzstd-dev libboost-filesystem-dev libgtk-4-dev qtbase5-private-dev \
     fcitx5-module-lua-dev libqt5webkit5-dev liblua5.3-dev qtwebengine5-dev iso-codes libasio-dev \
-    meson libxml2-dev libgmp-dev
+    binutils-x86-64-linux-gnu binutils-aarch64-linux-gnu binutils-arm-linux-gnueabihf binutils-i686-linux-gnu \
+    meson libxml2-dev libgmp-dev gperf
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 

@@ -19,6 +19,9 @@ libintlLiteRule = do
   buildLibintlLite <-
     useCMake $
       (cmakeBuilder "libintl-lite")
-        { cmakeFlags = const ["-DENABLE_NLS=OFF"]
+        { cmakeFlags = const ["-DENABLE_NLS=OFF"],
+          preBuild = BuildAction $ \_ src -> do
+                    cmd_ (Cwd src) "git checkout ."
+                    cmd_ (Cwd src) "git apply ../patches/libintl-build.patch"
         }
   "libintl-lite" ~> buildWithAndroidEnv buildLibintlLite LibIntlLite
