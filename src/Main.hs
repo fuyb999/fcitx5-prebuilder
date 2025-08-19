@@ -98,7 +98,7 @@ main = do
               ]
         need artifacts
         writeFileLines (outputDir </> "artifacts.txt") ("toolchain-versions.json" : artifacts)
-        getToolchainVersions >>= writeFile' (outputDir </> "toolchain-versions.json") . TL.unpack . TLB.toLazyText . A.encodePrettyToTextBuilder
+--        getToolchainVersions >>= writeFile' (outputDir </> "toolchain-versions.json") . TL.unpack . TLB.toLazyText . A.encodePrettyToTextBuilder
       "fcitx5" ~> do
         need
           [ "libuv",
