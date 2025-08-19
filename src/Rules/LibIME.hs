@@ -6,8 +6,8 @@ where
 
 import Base
 import Data.Maybe (fromJust)
-import qualified Data.ByteString as BS
-import Control.Exception (catch, IOException)
+--import qualified Data.ByteString as BS
+--import Control.Exception (catch, IOException)
 
 dictNames :: [String]
 dictNames = ["sc", "extb"]

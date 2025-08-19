@@ -9,9 +9,15 @@ import Base
 hostFcitx5Rule :: Rules ()
 hostFcitx5Rule = do
   "host-fcitx5" ~> do
+    need ["xcb-imdkit"]
     let fcitx5Src = "fcitx5"
     let buildDir = outputDir </> "fcitx5-build-host"
     let hostPrefix = outputDir </> "host"
+
+    -- 获取 xcb-imdkit 的静态库路径
+    xcbImdkitLib <- getLibraryPath "xcb-imdkit" "libxcb-imdkit.a"
+    xcbImdkitInclude <- getIncludePath "xcb-imdkit"
+
     cmd_
       "cmake"
       "-B"
@@ -21,17 +27,22 @@ hostFcitx5Rule = do
       [ "-DCMAKE_BUILD_TYPE=Release",
         "-DCMAKE_INSTALL_PREFIX=" <> hostPrefix,
         "-DENABLE_TEST=OFF",
-        "-DENABLE_COVERAGE=OFF",
-        "-DENABLE_ENCHANT=OFF",
-        "-DENABLE_X11=OFF",
-        "-DENABLE_WAYLAND=OFF",
-        "-DENABLE_DBUS=OFF",
+        "-DENABLE_COVERAGE=ON",
+        "-DENABLE_ENCHANT=ON",
+        "-DENABLE_X11=ON",
+        "-DENABLE_WAYLAND=ON",
+        "-DENABLE_DBUS=ON",
         "-DENABLE_DOC=OFF",
-        "-DENABLE_SERVER=OFF",
-        "-DENABLE_KEYBOARD=OFF",
-        "-DENABLE_XDGAUTOSTART=OFF",
+        "-DENABLE_SERVER=ON",
+        "-DENABLE_KEYBOARD=ON",
+        "-DENABLE_XDGAUTOSTART=ON",
         "-DENABLE_EMOJI=OFF",
         "-DENABLE_LIBUUID=OFF"
+        , "-DCMAKE_FIND_LIBRARY_SUFFIXES=.a"
+        , "-DXCBImdkit_LIBRARY=" ++ xcbImdkitLib
+        , "-DXCBImdkit_INCLUDE_DIR=" ++ xcbImdkitInclude
+--        , "-DXCBImdkit_DIR=" <> outputDir </> "xcb-imdkit/x86_64/lib/cmake/XCBImdkit",
+        , "-DXCBImdkit_DIR=/prebuilder/build/xcb-imdkit/x86_64/lib/cmake/XCBImdkit"
       ]
       fcitx5Src
     cmd_

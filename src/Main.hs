@@ -32,6 +32,7 @@ import Rules.Marisa
 import Rules.OpenCC
 import Rules.YAMLCpp
 import Rules.ZSTD
+import Rules.XcbImdkit
 
 --------------------------------------------------------------------------------
 main :: IO ()
@@ -72,6 +73,7 @@ main = do
       anthyDictRule
       isInGitHubActionRule
       getOutputDirRule
+      xcbImdkitRule
       "everything" ~> do
         let artifacts =
               [ "spell-dict",
@@ -94,7 +96,8 @@ main = do
                 "libchewing",
                 "libthai",
                 "libiconv",
-                "anthy-dict"
+                "anthy-dict",
+                "xcb-imdkit"
               ]
         need artifacts
         writeFileLines (outputDir </> "artifacts.txt") ("toolchain-versions.json" : artifacts)
@@ -102,7 +105,8 @@ main = do
       "fcitx5" ~> do
         need
           [ "libuv",
-            "libintl-lite"
+            "libintl-lite",
+            "xcb-imdkit"
           ]
       "app" ~> do
         need

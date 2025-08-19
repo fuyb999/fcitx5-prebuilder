@@ -43,3 +43,4 @@ executable prebuilder
     Rules.OpenCC
     Rules.YAMLCpp
     Rules.ZSTD
+    Rules.XcbImdkit

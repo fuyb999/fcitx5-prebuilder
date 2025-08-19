@@ -36,10 +36,12 @@ module Base
     writeGitHubBuildSummary,
     getOutputDirRule,
     getOutputDir,
+    getIncludePath,
+    getLibraryPath
   )
 where
 
-import Control.Applicative ((<|>))
+import Control.Applicative ()
 import Control.Monad.Extra (forM_, fromMaybeM, void, whenM)
 import Data.List.Extra (split)
 import Data.Maybe (fromJust, isJust)
@@ -66,6 +68,7 @@ outputDir :: FilePath
 outputDir = "build"
 
 --------------------------------------------------------------------------------
+
 
 data DownloadFile = DownloadFile
   { downloadBaseUrl :: String,
@@ -203,5 +206,17 @@ getOutputDirRule = void $ addOracle $ \(GetOutputDir _) -> liftIO $ canonicalize
 
 getOutputDir :: Action FilePath
 getOutputDir = askOracle $ GetOutputDir ()
+
+--------------------------------------------------------------------------------
+
+getLibraryPath :: String -> String -> Action FilePath
+getLibraryPath package libName = do
+    outputDir1 <- getOutputDir
+    pure $ outputDir1 </> package </> "lib" </> libName
+
+getIncludePath :: String -> Action FilePath
+getIncludePath package = do
+    outputDir1 <- getOutputDir
+    pure $ outputDir1 </> package </> "include"
 
 --------------------------------------------------------------------------------
