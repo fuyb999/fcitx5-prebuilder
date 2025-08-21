@@ -6,8 +6,6 @@ where
 
 import Base
 import Data.Maybe (fromJust)
---import qualified Data.ByteString as BS
---import Control.Exception (catch, IOException)
 
 dictNames :: [String]
 dictNames = ["sc", "extb"]
@@ -22,26 +20,14 @@ libIMERule = do
   pinyinDictRule
   tableDictRule
   "libime" ~> do
-    -- 使用二进制模式复制文件
-    binCopyFile (outputDir </> "sc.dict") $ outputDir </> "libime" </> "data" </> "sc.dict"
-    binCopyFile (outputDir </> "extb.dict") $ outputDir </> "libime" </> "data" </> "extb.dict"
-    binCopyFile (outputDir </> "sc.lm") $ outputDir </> "libime" </> "data" </> "zh_CN.lm"
-    binCopyFile (outputDir </> "sc.lm.predict") $ outputDir </> "libime" </> "data" </> "zh_CN.lm.predict"
+    copyFile' (outputDir </> "sc.dict") $ outputDir </> "libime" </> "data" </> "sc.dict"
+    copyFile' (outputDir </> "extb.dict") $ outputDir </> "libime" </> "data" </> "extb.dict"
+    copyFile' (outputDir </> "sc.lm") $ outputDir </> "libime" </> "data" </> "zh_CN.lm"
+    copyFile' (outputDir </> "sc.lm.predict") $ outputDir </> "libime" </> "data" </> "zh_CN.lm.predict"
     forM_ tableDictNames $ \table ->
       let name = table <.> "main.dict"
-       in binCopyFile (outputDir </> name) (outputDir </> "libime" </> "table" </> name)
+       in copyFile' (outputDir </> name) (outputDir </> "libime" </> "table" </> name)
 
--- 二进制文件复制辅助函数
-binCopyFile :: FilePath -> FilePath -> Action ()
-binCopyFile src dst = do
-  -- 检查源文件是否存在
-  pure()
---  fileExists <- liftIO (Dir.doesFileExist src)  -- 修正语法
---  if not fileExists
---    then liftIO $ putStrLn $ "警告: 源文件不存在，跳过复制: " ++ src
---    else do
---      need [src]  -- 确保源文件已构建
---      liftIO $ BS.readFile src >>= BS.writeFile dst
 --------------------------------------------------------------------------------
 
 libIMEToolsRule :: Rules ()

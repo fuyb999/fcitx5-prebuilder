@@ -5,7 +5,7 @@ RUN sed -i -E 's/(archive|security).ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /
 RUN ulimit -n 10240
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y git curl wget ca-certificates build-essential cmake extra-cmake-modules pkg-config \
+RUN apt-get update && apt-get install -y git curl wget tar ca-certificates build-essential cmake extra-cmake-modules pkg-config \
     libxcb1-dev libxcb-keysyms1-dev libxcb-util0-dev libdbus-1-dev libevent-dev uuid-dev gettext \
     libsystemd-dev libxkbfile-dev libxkbcommon-x11-dev libxcb-xkb-dev libxcb1-dev libpango1.0-dev \
     libpangocairo-1.0-0 libenchant-2-dev libxcb-ewmh-dev libxcb-xinerama0-dev libxcb-icccm4-dev \
@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y git curl wget ca-certificates build-ess
     libjson-c-dev iso-codes libzstd-dev libboost-filesystem-dev libgtk-4-dev qtbase5-private-dev \
     fcitx5-module-lua-dev libqt5webkit5-dev liblua5.3-dev qtwebengine5-dev iso-codes libasio-dev \
     binutils-x86-64-linux-gnu binutils-aarch64-linux-gnu binutils-arm-linux-gnueabihf binutils-i686-linux-gnu \
-    meson libxml2-dev libgmp-dev gperf
+    meson libxml2-dev libgmp-dev gperf zstd
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 

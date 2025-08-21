@@ -11,7 +11,7 @@ services:
   fcitx5-prebuilder:
     image: fcitx5-prebuilder:latest
     container_name: fcitx5-prebuilder
-    entrypoint: ./build-cabal && cabal run prebuilder -- --verbose fctix5
+    entrypoint: tail -f /dev/null
     build:
       context: .
       dockerfile: Dockerfile
