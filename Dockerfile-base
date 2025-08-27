@@ -21,6 +21,15 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 
 ENV PATH=/root/.cabal/bin:/root/.ghcup/bin:/usr/bin:/usr/sbin:/usr/local/bin
 
+# fix libime copy file error
+ENV LANG=zh_CN.UTF-8
+ENV LC_ALL=zh_CN.UTF-8
+
+RUN apt-get install -y locales language-pack-zh-hans fonts-wqy-zenhei && \
+    sed -i '/zh_CN.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen && \
+    update-locale LANG=zh_CN.UTF-8
+
 WORKDIR /prebuilder
 
 COPY . .
