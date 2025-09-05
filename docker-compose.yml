@@ -4,14 +4,17 @@ services:
 
   fcitx5-prebuilder-base:
     image: fcitx5-prebuilder-base:latest
+    entrypoint: cabal run prebuilder -- --verbose everything
+    volumes:
+      - ./:/prebuilder
     build:
       context: .
       dockerfile: Dockerfile-base
 
-  fcitx5-prebuilder:
-    image: fcitx5-prebuilder:latest
-    container_name: fcitx5-prebuilder
-    entrypoint: tail -f /dev/null
-    build:
-      context: .
-      dockerfile: Dockerfile
+#  fcitx5-prebuilder:
+#    image: fcitx5-prebuilder:latest
+#    container_name: fcitx5-prebuilder
+#    entrypoint: tail -f /dev/null
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
