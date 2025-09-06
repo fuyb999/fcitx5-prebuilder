@@ -35,7 +35,7 @@ boostRule = do
                 "-DBOOST_EXCLUDE_LIBRARIES="
                   <> intercalate
                     ";"
-                    [ "atomic",
+                    [ -- REMOVED "atomic" from exclusion list (required by filesystem)
                       "asio",
                       "charconv",
                       "chrono",
@@ -45,7 +45,7 @@ boostRule = do
                       "coroutine",
                       "date_time",
                       "fiber",
-                      "filesystem",
+                      -- REMOVED "filesystem" from exclusion list
                       "graph",
                       "json",
                       "locale",
