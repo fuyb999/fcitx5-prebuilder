@@ -1,5 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 03903b9..fbc99ae 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,9 @@
+ cmake_minimum_required(VERSION 3.0)
+ project(LibIntl VERSION 1.0)
+
++# 启用位置无关代码 (PIC) - 添加这一行
++set(CMAKE_POSITION_INDEPENDENT_CODE ON)
++
+ include(GNUInstallDirs)
+
+ add_library(intl STATIC internal/libintl.cpp)
+@@ -39,4 +42,4 @@ configure_package_config_file(
+ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/LibIntlConfig.cmake"
+               "${CMAKE_CURRENT_BINARY_DIR}/LibIntlConfigVersion.cmake"
+         DESTINATION "lib/cmake"
+-)
++)
+\ No newline at end of file
 diff --git a/build-android-cmake.sh b/build-android-cmake.sh
-index d3b84cf..8ffd483 100755
+index d3b84cf..8eaeeb1 100755
 --- a/build-android-cmake.sh
 +++ b/build-android-cmake.sh
 @@ -5,10 +5,10 @@ CMAKE=""
@@ -17,18 +38,14 @@ index d3b84cf..8ffd483 100755
          -DCMAKE_BUILD_TYPE=Release \
          -DCMAKE_INSTALL_PREFIX=out/libintl-lite/"$1" \
          .
-@@ -42,12 +42,12 @@ if [ -z "${ANDROID_ABI}" ]; then
-     exit 1
- fi
- 
--CMAKE="$ANDROID_SDK_ROOT/cmake/$ANDROID_SDK_CMAKE_VERSION/bin/cmake"
--
+@@ -44,10 +44,10 @@ fi
+
+ CMAKE="$ANDROID_SDK_ROOT/cmake/$ANDROID_SDK_CMAKE_VERSION/bin/cmake"
+
 -if [ ! -f "$CMAKE" ]; then
 -    echo "Cannot find cmake: '$CMAKE'"
 -    exit 1
 -fi
-+#CMAKE="$ANDROID_SDK_ROOT/cmake/$ANDROID_SDK_CMAKE_VERSION/bin/cmake"
-+#
 +#if [ ! -f "$CMAKE" ]; then
 +#    echo "Cannot find cmake: '$CMAKE'"
 +#    exit 1
