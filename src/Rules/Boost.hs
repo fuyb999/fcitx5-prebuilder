@@ -24,8 +24,8 @@ boostRule = do
             boostVersion <- getConfig' "boost_version"
             sha256 <- getConfig' "boost_sha256"
             let boostTag = "boost-" <> boostVersion
-                boostTar = boostTag <> "-cmake" <.> "tar" <.> "xz"
-                boostUrl = "https://github.com/boostorg/boost/releases/download" </> boostTag <> "/"
+                boostTar = boostTag <> "-cmake" <.> "tar" <.> "xz"  -- Original format
+                boostUrl = "https://github.com/boostorg/boost/releases/download" </> boostTag <> "/"  -- Original URL
             _ <- download boostUrl boostTar sha256
             cmd_ (Cwd out) "tar" "xf" boostTar
             pure $ out </> boostTag,
@@ -35,8 +35,7 @@ boostRule = do
                 "-DBOOST_EXCLUDE_LIBRARIES="
                   <> intercalate
                     ";"
-                    [ -- REMOVED "atomic" from exclusion list (required by filesystem)
-                      "asio",
+                    [ "asio",
                       "charconv",
                       "chrono",
                       "cobalt",
@@ -45,7 +44,6 @@ boostRule = do
                       "coroutine",
                       "date_time",
                       "fiber",
-                      -- REMOVED "filesystem" from exclusion list
                       "graph",
                       "json",
                       "locale",
@@ -71,13 +69,40 @@ boostRule = do
                 "-DBOOST_INSTALL_LAYOUT=system"
               ]
         }
+
+  -- Simple approach: Build regex manually after CMake build
+  "/prebuilder" </> outputDir </> "boost-build-x86_64" </> ".regex-built" %> \outFile -> do
+    let outDir = "/prebuilder" </> outputDir </> "boost" </> "x86_64"
+    boostVersion <- getConfig' "boost_version"
+    let boostTag = "boost-" <> boostVersion
+        src = outputDir </> boostTag
+        buildDir = takeDirectory outFile  </> "b2_build"
+
+    -- Build regex using b2
+    cmd_ (Cwd src) "./bootstrap.sh"
+    cmd_ (Cwd src) "./b2"
+        "--with-regex"
+        ("--build-dir=" <> buildDir)
+        "variant=release"
+        "link=static"
+        "install"
+        ("--prefix=" <> outDir)
+
+    writeFile' outFile ""
+
   "boost" ~> do
     env <- getAndroidEnv
-    -- since header files are the same regardless of abi
-    -- we take a random one
     let abiList = getABIList env
         firstAbi = head abiList
+
+    -- Build with CMake first
     _ <- buildBoost $ WithAndroidEnv Boost env
+
+    -- Then build regex for each ABI (rename 'abi' to avoid conflict)
+    forM_ abiList $ \currentAbi -> do
+        let markerFile = "/prebuilder" </> outputDir </> "boost-build-x86_64" </> ".regex-built"
+        need [markerFile]
+
     liftIO $ do
       getDirectoryFilesIO
         (outputDir </> "boost" </> firstAbi </> "include" </> "boost")
