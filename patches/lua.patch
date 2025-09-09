@@ -1,14 +1,14 @@
-diff --git a/lua-5.4.7/src/liolib.c b/lua-5.4.7/src/liolib.c
-index c5075f3..1946943 100644
---- a/lua-5.4.7/src/liolib.c
-+++ b/lua-5.4.7/src/liolib.c
-@@ -115,7 +115,8 @@ static int l_checkmode (const char *mode) {
- 
- #if !defined(l_fseek)		/* { */
- 
--#if defined(LUA_USE_POSIX)	/* { */
-+#if defined(LUA_USE_POSIX) && \
-+   (!defined(ANDROID) || (defined(__LP64__) || ANDROID_PLATFORM >= 24))	/* { */
- 
- #include <sys/types.h>
- 
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8616569..48bd5ac 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,9 @@
+ cmake_minimum_required(VERSION 3.1...3.12)
+ project(lua LANGUAGES C VERSION 5.4.7)
+
++# 启用位置无关代码 (PIC) - 添加这一行
++set(CMAKE_POSITION_INDEPENDENT_CODE ON)
++
+ option(LUA_SUPPORT_DL "Support dynamic loading of compiled modules" OFF)
+ option(LUA_BUILD_AS_CXX "Build lua as C++" OFF)
+ option(LUA_ENABLE_SHARED "Build dynamic liblua" ON)
