@@ -1,8 +1,18 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d89d928..6ba6a32 100644
+index fc08a87..6bbc674 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -49,6 +49,7 @@ add_library(marisa
+@@ -1,6 +1,9 @@
+ cmake_minimum_required(VERSION 3.10)
+ project(marisa VERSION 0.2.6)
+
++# 启用位置无关代码 (PIC) - 添加这一行
++set(CMAKE_POSITION_INDEPENDENT_CODE ON)
++
+ # Official repo: https://github.com/s-yata/marisa-trie
+ # CMake script borrowed from https://github.com/Karry/osmscout-sailfish/blob/master/CMakeLists.txt
+
+@@ -51,6 +54,7 @@ add_library(marisa
      ${MARISA_SRC}
  )
  
